@@ -1,0 +1,33 @@
+const { watch } = require('chokidar');
+const { basename, extname } = require('path');
+const { readFile } = require('fs').promises;
+
+async function readFileContentFromPath(pathFile) {
+  return await readFile(pathFile, 'utf-8')
+}
+
+function watchYourPath(watchedPath) {
+  watch(watchedPath, {
+    usePolling: true,
+    awaitWriteFinish: true,
+    ignoreInitial: true,
+  }).on('all', async (eventName, path) => {
+    if (extname(path) === '.js') {
+      if (eventName === 'add') {
+        console.log(`File ${basename(path)} has been added`)
+        console.log('Current content of this file:')
+        console.log(await readFileContentFromPath(path))
+      }
+      if (eventName === 'change') {
+        console.log(`File ${basename(path)} has been changed`)
+        console.log('Current content of this file:')
+        console.log(await readFileContentFromPath(path))
+      }
+      if (eventName === 'unlink') {
+        console.log(`File ${basename(path)} has been removed`)
+      }
+    }
+  })
+}
+// watchYourPath(process.argv[2])
+watchYourPath('./data')
