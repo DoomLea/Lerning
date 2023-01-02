@@ -1,0 +1,12 @@
+// Wersja z .promises i async/await sprawdza adres IP
+
+const { lookup } = require('dns').promises;
+
+(async () => {
+  try {
+    const data = await lookup('google.com');
+    console.log(data.address);
+  } catch (err) {
+    console.log('Oh no', err);
+  }
+})();
