@@ -1,0 +1,14 @@
+Wersja z util.promisify 
+
+const {readFile} = require('fs');
+ const {promisify} = require('util');
+
+ const readFilePromised = promisify(readFile);
+
+ readFilePromised('./index.js', 'utf8')
+ .then(data => {
+    console.log(data);
+  })
+ .catch(error => {
+    console.log('Oh no', error);
+  });
